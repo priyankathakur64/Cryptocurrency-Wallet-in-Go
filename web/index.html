@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency Wallet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            padding: 10px;
+            background: #e7e7e7;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Cryptocurrency Wallet</h1>
+    </header>
+    <div class="container">
+        <h2>Create Transaction</h2>
+        <label for="receiverKey">Receiver Public Key:</label>
+        <input type="text" id="receiverKey" placeholder="Enter receiver's public key" />
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" placeholder="Enter amount to send" />
+
+        <button id="sendTransaction">Send Transaction</button>
+
+        <div id="transactionResult" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById("sendTransaction").addEventListener("click", async function () {
+            const receiverKey = document.getElementById("receiverKey").value;
+            const amount = document.getElementById("amount").value;
+
+            if (!receiverKey || !amount) {
+                alert("Please fill out all fields!");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:8000/create-transaction", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ receiverKey, amount }),
+                });
+
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+                const result = await response.json();
+                const resultDiv = document.getElementById("transactionResult");
+                resultDiv.style.display = "block";
+                resultDiv.textContent = `Transaction created! Signature: ${result.signature}`;
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to send transaction.");
+            }
+        });
+    </script>
+</body>
+</html>

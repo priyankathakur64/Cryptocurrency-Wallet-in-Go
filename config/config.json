@@ -1,0 +1,16 @@
+{
+    "wallet": {
+      "dataFile": "wallet_data.json",
+      "defaultCurrency": "CoinX"
+    },
+    "network": {
+      "host": "localhost",
+      "port": 8000,
+      "protocol": "http"
+    },
+    "security": {
+      "encryption": true,
+      "encryptionKey": "my-secret-key"
+    }
+  }
+  
